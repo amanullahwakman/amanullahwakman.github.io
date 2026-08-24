@@ -7,23 +7,24 @@
 <title>Amanullah Wakman | Academic CV</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 html, body {
     margin: 0;
     padding: 0;
-    width: 100%;
-    min-height: 100%;
-    font-family: Arial, Helvetica, sans-serif;
     background: #525659;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .viewer-header {
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
-    height: 58px;
     z-index: 1000;
+    height: 58px;
     background: #102a43;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -31,7 +32,6 @@ html, body {
 }
 
 .viewer-title {
-    color: white;
     font-size: 16px;
     font-weight: bold;
 }
@@ -40,30 +40,38 @@ html, body {
     background: white;
     color: #102a43;
     text-decoration: none;
-    padding: 9px 14px;
+    padding: 9px 15px;
     border-radius: 5px;
-    font-weight: bold;
     font-size: 14px;
+    font-weight: bold;
 }
 
 .download-button:hover {
-    background: #e8eef3;
+    background: #e6edf3;
 }
 
-.pdf-area {
-    padding-top: 58px;
+#pdf-viewer {
     width: 100%;
-    min-height: 100vh;
+    padding: 20px 10px 40px;
 }
 
-.pdf-frame {
-    width: 100%;
-    height: calc(100vh - 58px);
-    min-height: 800px;
-    border: none;
+.pdf-page {
     display: block;
+    margin: 0 auto 20px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    max-width: 100%;
+    height: auto;
+}
+
+.loading {
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 16px;
 }
 </style>
+
 </head>
 
 <body>
@@ -83,15 +91,57 @@ Download PDF
 
 </div>
 
-<div class="pdf-area">
-
-<iframe
-class="pdf-frame"
-src="Amanullah_Wakman_Academic_CV.pdf#toolbar=1&navpanes=0&scrollbar=1"
-title="Amanullah Wakman Academic CV">
-</iframe>
-
+<div id="pdf-viewer">
+<div class="loading">Loading Academic CV...</div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const pdfUrl = "Amanullah_Wakman_Academic_CV.pdf";
+const viewer = document.getElementById("pdf-viewer");
+
+pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
+
+    viewer.innerHTML = "";
+
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+
+        pdf.getPage(pageNumber).then(function(page) {
+
+            const viewport = page.getViewport({ scale: 1.5 });
+
+            const canvas = document.createElement("canvas");
+            canvas.className = "pdf-page";
+
+            const context = canvas.getContext("2d");
+
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+
+            viewer.appendChild(canvas);
+
+            page.render({
+                canvasContext: context,
+                viewport: viewport
+            });
+
+        });
+
+    }
+
+}).catch(function(error) {
+
+    viewer.innerHTML =
+    "<div class='loading'>Unable to display the CV. Please use the Download PDF button above.</div>";
+
+    console.error(error);
+
+});
+</script>
 
 </body>
 </html>
