@@ -1,21 +1,40 @@
-<div class="viewer-header">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<h1>Amanullah Wakman — Academic CV</h1>
+<title>Amanullah Wakman | Academic CV</title>
 
-<a
-class="download-button"
-href="Amanullah_Wakman_Academic_CV.pdf"
-download>
-Download PDF
-</a>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
 
-</div>
+body {
+    background: #525659;
+}
 
-<div class="pdf-container">
+.pdf-viewer {
+    width: 100%;
+    height: 100vh;
+    border: none;
+}
+</style>
+
+</head>
+
+<body>
 
 <iframe
-src="Amanullah_Wakman_Academic_CV.pdf#toolbar=1&navpanes=0&scrollbar=1"
-title="Amanullah Wakman Academic CV">
+    class="pdf-viewer"
+    src="Amanullah_Wakman_Academic_CV.pdf#toolbar=1&navpanes=0&scrollbar=1"
+    title="Amanullah Wakman Academic CV">
 </iframe>
 
-</div>
+</body>
+</html>
